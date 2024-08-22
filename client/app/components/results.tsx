@@ -4,16 +4,15 @@ import Image from "next/image";
 
 const DEFAULT_IMAGE_PATH = "/default.png";
 
-// Helper function to determine the class for name size based on combined length
 const getNameClass = (firstName, lastName) => {
   const totalLength = firstName.length + lastName.length;
   
   if (totalLength >= 20) {
-    return "text-sm"; // Small text for very long names
+    return "text-sm"; 
   } else if (totalLength >= 15 && totalLength < 20) {
-    return "text-base"; // Base text for moderately long names
+    return "text-base"; 
   } else {
-    return "text-lg"; // Large text for short names
+    return "text-lg"; 
   }
 };
 

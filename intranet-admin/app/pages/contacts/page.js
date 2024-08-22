@@ -151,9 +151,9 @@ const Contacts = () => {
         ))}
         <button
           onClick={handleCreate}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none"
+          className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none"
         >
-          Create
+          Dodaj
         </button>
       </div>
 
@@ -187,7 +187,7 @@ const Contacts = () => {
           onClick={handleUpdate}
           className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 focus:outline-none"
         >
-          Update
+          Uredi
         </button>
       </div>
 
@@ -206,7 +206,7 @@ const Contacts = () => {
           onClick={handleDelete}
           className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none"
         >
-          Delete
+          Izbriši
         </button>
       </div>
     </div>
