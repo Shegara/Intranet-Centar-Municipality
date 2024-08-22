@@ -1,0 +1,26 @@
+import React from "react";
+import Navbar from "@/app/components/navbar";
+import Docs from "@/app/components/docs";
+import Footer from "@/app/components/footer";
+
+const Documents = () => {
+  return (
+    <div>
+      <Navbar />
+      <div
+        className="relative h-screen bg-cover bg-center"
+        style={{ backgroundImage: "url('/documents_wallpaper.webp')" }}
+      >
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-transparent opacity-20" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-full md:w-5/6 lg:w-3/4 xl:w-2/3">
+            <Docs/>
+          </div>
+        </div>
+      </div>
+      <Footer/>
+    </div>
+  );
+};
+
+export default Documents;
