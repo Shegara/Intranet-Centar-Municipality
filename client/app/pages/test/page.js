@@ -10,7 +10,7 @@ const ToggleButton = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen">
+        <div className="flex items-center justify-center min-h-screen bg-custom-gradient">
             <div
                 onClick={toggleMenu}
                 className="relative w-12 h-12 flex items-center justify-center cursor-pointer"

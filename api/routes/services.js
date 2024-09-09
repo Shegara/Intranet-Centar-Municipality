@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db'); 
 
-// C
+// C - Create
 router.post("/", async (req, res) => {
   const { name, category } = req.body;
   try {
@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// R
+// R - READ ALL
 router.get("/", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM services");
@@ -28,7 +28,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// R
+// R - READ SERVICE BY ID
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -43,7 +43,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// U
+// U - UPDATE SERVICE
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { name, category } = req.body;
@@ -62,7 +62,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// D
+// D - DELETE SERVICE
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db'); // Import pool from db.js
 
-// CREATE: Add a new user
+// C - CREATE A NEW USER
 router.post("/", async (req, res) => {
   const {
     first_name,
@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// READ: Get all users
+// R - READ ALL USERS
 router.get("/", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM users");
@@ -48,7 +48,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// READ: Get a single user by ID
+// R - READ USER BY ID
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -63,7 +63,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// UPDATE: Update a user
+// U - UPDATE USER
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const {
@@ -103,7 +103,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// DELETE: Delete a user
+// D - DELETE USER
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
