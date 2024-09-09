@@ -23,6 +23,7 @@ npm run dev
 
 ## For the dashboard CMS 
 cd intranet-admin
+
 npm run dev
 
 # USAGE
