@@ -10,7 +10,6 @@ const Sindikat = () => {
       <div
         className="relative h-screen bg-custom-gradient"
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-transparent opacity-20" />
         <Union />
       </div>
       <Footer />
