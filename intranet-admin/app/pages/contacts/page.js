@@ -28,7 +28,7 @@ const Contacts = () => {
     rank: '',
     floor: '',
     office_num: '',
-    image: '',
+    image: null, 
     service: ''
   });
 
@@ -41,7 +41,7 @@ const Contacts = () => {
     rank: '',
     floor: '',
     office_num: '',
-    image: '',
+    image: null, 
     service: ''
   });
 
@@ -62,10 +62,28 @@ const Contacts = () => {
     setDeleteUserId(e.target.value);
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setCreateUser((prev) => ({ ...prev, image: file }));
+        setUpdateUser((prev) => ({ ...prev, image: file }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleCreate = async () => {
     setLoading(true);
+    const formData = new FormData();
+    Object.keys(createUser).forEach((key) => {
+      formData.append(key, createUser[key]);
+    });
     try {
-      await axios.post('http://localhost:8800/api/users', createUser); 
+      await axios.post('http://localhost:8800/api/users', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
       toast.success('Uposlenik uspješno dodat u bazu podataka');
       setCreateUser({
         first_name: '',
@@ -75,7 +93,7 @@ const Contacts = () => {
         rank: '',
         floor: '',
         office_num: '',
-        image: '',
+        image: null,
         service: ''
       });
     } catch (error) {
@@ -88,8 +106,14 @@ const Contacts = () => {
 
   const handleUpdate = async () => {
     setLoading(true);
+    const formData = new FormData();
+    Object.keys(updateUser).forEach((key) => {
+      formData.append(key, updateUser[key]);
+    });
     try {
-      await axios.put(`http://localhost:8800/api/users/${updateUser.id}`, updateUser); 
+      await axios.put(`http://localhost:8800/api/users/${updateUser.id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
       toast.success('Uposlenik uspješno uređen u bazi podataka');
       setUpdateUser({
         id: '',
@@ -100,7 +124,7 @@ const Contacts = () => {
         rank: '',
         floor: '',
         office_num: '',
-        image: '',
+        image: null,
         service: ''
       });
     } catch (error) {
@@ -114,7 +138,7 @@ const Contacts = () => {
   const handleDelete = async () => {
     setLoading(true);
     try {
-      await axios.delete(`http://localhost:8800/api/users/${deleteUserId}`); 
+      await axios.delete(`http://localhost:8800/api/users/${deleteUserId}`);
       toast.success('Uposlenik uspješno izbrisan iz baze podataka');
       setDeleteUserId('');
     } catch (error) {
@@ -139,13 +163,25 @@ const Contacts = () => {
           key !== 'id' && (
             <div key={key} className="mb-4">
               <label className="block text-gray-700 capitalize">{fieldLabels[key] || key.replace('_', ' ')}</label>
-              <input
-                type={key === 'floor' ? 'number' : 'text'}
-                name={key}
-                value={createUser[key]}
-                onChange={handleCreateChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              />
+              {key === 'image' ? (
+                <>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                  />
+                  {createUser.image && <img src={URL.createObjectURL(createUser.image)} alt="Preview" className="mt-2 max-w-xs" />}
+                </>
+              ) : (
+                <input
+                  type={key === 'floor' ? 'number' : 'text'}
+                  name={key}
+                  value={createUser[key]}
+                  onChange={handleCreateChange}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+              )}
             </div>
           )
         ))}
@@ -173,16 +209,28 @@ const Contacts = () => {
           key !== 'id' && (
             <div key={key} className="mb-4">
               <label className="block text-gray-700 capitalize">{fieldLabels[key] || key.replace('_', ' ')}</label>
-              <input
-                type={key === 'floor' ? 'number' : 'text'}
-                name={key}
-                value={updateUser[key]}
-                onChange={handleUpdateChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              />
-            </div>
-          )
-        ))}
+              {key === 'image' ? (
+                <>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                  />
+                  {updateUser.image && <img src={URL.createObjectURL(updateUser.image)} alt="Preview" className="mt-2 max-w-xs" />}
+                </>
+              ) : (
+                <input
+                  type={key === 'floor' ? 'number' : 'text'}
+                  name={key}
+                  value={updateUser[key]}
+                  onChange={handleUpdateChange}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+                )}
+              </div>
+            )
+          ))}
         <button
           onClick={handleUpdate}
           className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 focus:outline-none"
