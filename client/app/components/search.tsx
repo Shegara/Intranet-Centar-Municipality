@@ -5,17 +5,35 @@ import axios from 'axios';
 import Results from "./results";
 import XIcon from '@mui/icons-material/HighlightOffSharp';
 
-const Search = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filterOptions, setFilterOptions] = useState({
+interface FilterOptions {
+  floor: string;
+  officeNum: string;
+  service: string;
+}
+
+interface User {
+  first_name: string;
+  last_name: string;
+  rank: string;
+  mail: string;
+  floor: string;
+  office_num: string;
+  service: string;
+  image?: string;
+  phone_num: string;
+}
+
+const Search: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filterOptions, setFilterOptions] = useState<FilterOptions>({
     floor: "",
     officeNum: "",
     service: "",
   });
-  const [searchResults, setSearchResults] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleFilterChange = (filter, value) => {
+  const handleFilterChange = (filter: keyof FilterOptions, value: string) => {
     setFilterOptions({ ...filterOptions, [filter]: value });
   };
 
@@ -36,7 +54,7 @@ const Search = () => {
     const fetchUsers = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:8800/api/users');
+        const response = await axios.get<User[]>('http://localhost:8800/api/users');
         const filteredResults = response.data.filter((item) => {
           const firstName = item.first_name ? item.first_name.toLowerCase() : '';
           const lastName = item.last_name ? item.last_name.toLowerCase() : '';
@@ -76,7 +94,12 @@ const Search = () => {
     fetchUsers();
   }, [filterOptions, searchTerm]);
 
-  const FilterBox = ({ label, options, value, onChange }) => {
+  const FilterBox: React.FC<{
+    label: string;
+    options: string[];
+    value: string;
+    onChange: (value: string) => void;
+  }> = ({ label, options, value, onChange }) => {
     return (
       <div className="flex-1">
         <label className="block text-sm font-medium text-gray-700">

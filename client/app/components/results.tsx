@@ -4,7 +4,23 @@ import Image from "next/image";
 
 const DEFAULT_IMAGE_PATH = "/default.png";
 
-const getNameClass = (firstName, lastName) => {
+interface SearchResult {
+  first_name: string;
+  last_name: string;
+  image?: string;
+  service: string;
+  rank: string;
+  mail: string;
+  floor: string;
+  office_num: string;
+  phone_num: string;
+}
+
+interface ResultsProps {
+  searchResults: SearchResult[];
+}
+
+const getNameClass = (firstName: string, lastName: string): string => {
   const totalLength = firstName.length + lastName.length;
   
   if (totalLength >= 20) {
@@ -16,11 +32,11 @@ const getNameClass = (firstName, lastName) => {
   }
 };
 
-const getEmailClass = (mail) => {
+const getEmailClass = (mail: string): string => {
   return mail.length >= 20 ? "text-sm" : "text-base";
 };
 
-const Results = ({ searchResults }) => {
+const Results: React.FC<ResultsProps> = ({ searchResults }) => {
   const sortedResults = searchResults.slice().sort((a, b) => {
     return a.first_name.localeCompare(b.first_name);
   });

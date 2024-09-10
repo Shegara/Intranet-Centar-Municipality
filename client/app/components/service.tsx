@@ -7,21 +7,35 @@ import CloseIcon from "@mui/icons-material/Close";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import XIcon from '@mui/icons-material/HighlightOffSharp';
 
-const Service = () => {
-  const [expanded, setExpanded] = useState([]);
-  const [searchQueries, setSearchQueries] = useState([]);
-  const [services, setServices] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const contentRefs = useRef([]);
+// Define types for user and services
+interface User {
+  first_name: string;
+  last_name: string;
+  rank: string;
+  mail: string;
+  phone_num: string;
+  service: string;
+}
+
+interface Services {
+  [key: string]: User[];
+}
+
+const Service: React.FC = () => {
+  const [expanded, setExpanded] = useState<boolean[]>([]);
+  const [searchQueries, setSearchQueries] = useState<string[]>([]);
+  const [services, setServices] = useState<Services>({});
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const contentRefs = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:8800/api/users");
+        const response = await axios.get<User[]>("http://localhost:8800/api/users");
         const users = response.data;
 
-        const groupedServices = users.reduce((acc, user) => {
+        const groupedServices = users.reduce((acc: Services, user) => {
           const serviceName = user.service;
           if (!acc[serviceName]) {
             acc[serviceName] = [];
@@ -36,7 +50,7 @@ const Service = () => {
           return numA - numB;
         });
 
-        const sortedServices = sortedServiceKeys.reduce((acc, key) => {
+        const sortedServices = sortedServiceKeys.reduce((acc: Services, key) => {
           acc[key] = groupedServices[key];
           return acc;
         }, {});
@@ -55,7 +69,7 @@ const Service = () => {
     fetchUsers();
   }, []);
 
-  const toggleExpand = (index) => {
+  const toggleExpand = (index: number) => {
     setExpanded((prevState) => {
       const newState = [...prevState];
       newState[index] = !newState[index];
@@ -63,7 +77,7 @@ const Service = () => {
     });
   };
 
-  const handleSearchChange = (index, query) => {
+  const handleSearchChange = (index: number, query: string) => {
     setSearchQueries((prevQueries) => {
       const newQueries = [...prevQueries];
       newQueries[index] = query;
@@ -71,7 +85,7 @@ const Service = () => {
     });
   };
 
-  const clearSearch = (index) => {
+  const clearSearch = (index: number) => {
     setSearchQueries((prevQueries) => {
       const newQueries = [...prevQueries];
       newQueries[index] = "";
@@ -136,7 +150,7 @@ const Service = () => {
                   </div>
                 </div>
                 <div
-                  ref={(el) => (contentRefs.current[index] = el)}
+                  ref={(el) => (contentRefs.current[index] = el!)}
                   className={`transition-max-height duration-500 ease-in-out overflow-hidden max-h-0`}
                 >
                   <div className="relative">

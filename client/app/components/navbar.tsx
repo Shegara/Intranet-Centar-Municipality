@@ -1,12 +1,10 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import MenuIcon from '@mui/icons-material/Menu';
-import CancelIcon from '@mui/icons-material/Cancel';
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const Navbar: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);

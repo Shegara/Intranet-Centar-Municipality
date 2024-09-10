@@ -1,16 +1,23 @@
 'use client';
-import React, { useState, useRef, useEffect } from "react";
+
+import React, { useState, useRef, useEffect, MutableRefObject } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import DownloadIcon from '@mui/icons-material/Download';
 import docsData from '../docsData';
 import parse from 'html-react-parser';
 
-const Docs = () => {
-  const [expanded, setExpanded] = useState([false, false, false, false]);
-  const contentRefs = useRef([]);
+interface DocItem {
+  title: string;
+  content: string;
+  files: string[];
+}
 
-  const toggleExpand = (index) => {
+const Docs: React.FC = () => {
+  const [expanded, setExpanded] = useState<boolean[]>([false, false, false, false]);
+  const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const toggleExpand = (index: number) => {
     setExpanded((prevState) => {
       const newState = [...prevState];
       newState[index] = !newState[index];
@@ -22,28 +29,26 @@ const Docs = () => {
     contentRefs.current.forEach((ref, index) => {
       if (ref) {
         ref.style.transition = 'max-height 0.6s ease-in-out, opacity 0.6s ease-in-out';
-        
         ref.style.opacity = expanded[index] ? '1' : '0';
-        
         ref.style.maxHeight = expanded[index] ? `${ref.scrollHeight}px` : '0px';
       }
     });
   }, [expanded]);
 
-  const handleDownload = (file) => {
+  const handleDownload = (file: string) => {
     const link = document.createElement('a');
     link.href = `/documents${file}`;
-    link.download = file.split('/').pop();
+    link.download = file.split('/').pop() || '';
     link.click();
   };
 
-  const renderContentWithIcons = (content, files) => {
+  const renderContentWithIcons = (content: string, files: string[]) => {
     let lines = content.split('<br>').filter(line => line.trim() !== '');
-  
+
     if (lines.length === 0) {
       lines = [content];
     }
-  
+
     return lines.map((line, index) => (
       <React.Fragment key={index}>
         {index === 0 && <br />}
@@ -69,7 +74,7 @@ const Docs = () => {
           Općinski Dokumenti
         </header>
         <div className="grid grid-cols-1 gap-4 max-h-[550px] overflow-y-auto">
-          {docsData.map((item, index) => (
+          {docsData.map((item: DocItem, index: number) => (
             <div key={index} className="p-4 border border-gray-300 rounded">
               <div className="flex justify-between items-center">
                 <h2 className="text-lg font-semibold">{item.title}</h2>
