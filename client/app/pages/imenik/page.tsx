@@ -4,7 +4,7 @@ const Navbar = lazy(() => import('@/app/components/navbar'));
 const Search = lazy(() => import('@/app/components/search'));
 const Footer = lazy(() => import('@/app/components/footer'));
 
-const Imenik = () => {
+const Imenik : React.FC = () => {
   return (
     <div>
       <Suspense fallback={<div>Loading...</div>}>

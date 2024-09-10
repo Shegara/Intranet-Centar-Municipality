@@ -3,7 +3,7 @@ import React from "react";
 import Union from "@/app/components/union";
 import Footer from "@/app/components/footer";
 
-const Sindikat = () => {
+const Sindikat: React.FC = () => {
   return (
     <div>
       <Navbar />
@@ -18,3 +18,4 @@ const Sindikat = () => {
 };
 
 export default Sindikat;
+

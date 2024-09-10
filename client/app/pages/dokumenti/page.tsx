@@ -3,7 +3,7 @@ import Navbar from "@/app/components/navbar";
 import Docs from "@/app/components/docs";
 import Footer from "@/app/components/footer";
 
-const Documents = () => {
+const Documents : React.FC = () => {
   return (
     <div>
       <Navbar />

@@ -5,7 +5,7 @@ import Navbar from '@/app/components/navbar';
 import Service from '@/app/components/service';
 import React from 'react';
 
-const Sluzba = () => {
+const Sluzba: React.FC = () => {
   return (
     <div>
       <Navbar />
