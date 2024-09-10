@@ -7,7 +7,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import XIcon from '@mui/icons-material/HighlightOffSharp';
 
-// Define types for user and services
 interface User {
   first_name: string;
   last_name: string;

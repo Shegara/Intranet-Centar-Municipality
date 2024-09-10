@@ -14,6 +14,8 @@ Install dependencies if necessary
 ## Start the backend server
 cd api 
 
+npm run build
+
 npm start
 
 ## For the frontend

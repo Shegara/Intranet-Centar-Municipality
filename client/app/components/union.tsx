@@ -5,7 +5,6 @@ import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import contentData from '../contentData';
 
-// Define a type for the content data
 interface ContentItem {
   title: string;
   content: string;
