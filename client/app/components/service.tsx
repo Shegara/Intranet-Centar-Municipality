@@ -5,7 +5,7 @@ import axios from "axios";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
-import XIcon from '@mui/icons-material/HighlightOffSharp';
+import XIcon from "@mui/icons-material/HighlightOffSharp";
 
 interface User {
   first_name: string;
@@ -31,7 +31,9 @@ const Service: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get<User[]>("http://localhost:8800/api/users");
+        const response = await axios.get<User[]>(
+          "http://localhost:8800/api/users"
+        );
         const users = response.data;
 
         const groupedServices = users.reduce((acc: Services, user) => {
@@ -49,10 +51,13 @@ const Service: React.FC = () => {
           return numA - numB;
         });
 
-        const sortedServices = sortedServiceKeys.reduce((acc: Services, key) => {
-          acc[key] = groupedServices[key];
-          return acc;
-        }, {});
+        const sortedServices = sortedServiceKeys.reduce(
+          (acc: Services, key) => {
+            acc[key] = groupedServices[key];
+            return acc;
+          },
+          {}
+        );
 
         setServices(sortedServices);
         setExpanded(Array(sortedServiceKeys.length).fill(false));
@@ -124,10 +129,11 @@ const Service: React.FC = () => {
         <div className="grid grid-cols-1 gap-4 max-h-[550px] duration-500 ease-in-out overflow-y-auto transition-all">
           {Object.keys(services).map((service, index) => {
             const filteredUsers = services[service].filter((user) => {
-              const query = searchQueries[index].toLowerCase();
+              const query = (searchQueries[index] || "").toLowerCase();
+
               return (
-                user.first_name.toLowerCase().includes(query) ||
-                user.last_name.toLowerCase().includes(query)
+                (user.first_name?.toLowerCase() || "").includes(query) ||
+                (user.last_name?.toLowerCase() || "").includes(query)
               );
             });
 
@@ -158,7 +164,9 @@ const Service: React.FC = () => {
                       placeholder="Pretraga u ovoj službi..."
                       className="mb-2 p-3 border border-gray-300 rounded mt-4 w-full"
                       value={searchQueries[index]}
-                      onChange={(e) => handleSearchChange(index, e.target.value)}
+                      onChange={(e) =>
+                        handleSearchChange(index, e.target.value)
+                      }
                     />
                     {searchQueries[index] && (
                       <XIcon
