@@ -4,17 +4,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const router = express_1.default.Router();
+const multer_1 = __importDefault(require("multer"));
 const db_1 = __importDefault(require("../db"));
-// Create a new user
-router.post("/", async (req, res) => {
-    const { first_name, last_name, phone_num, mail, rank, floor, office_num, image, service, } = req.body;
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const router = express_1.default.Router();
+const storage = multer_1.default.diskStorage({
+    destination: (req, file, cb) => {
+        const uploadPath = path_1.default.join(__dirname, "../../uploads");
+        if (!fs_1.default.existsSync(uploadPath)) {
+            fs_1.default.mkdirSync(uploadPath);
+        }
+        cb(null, uploadPath);
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        cb(null, uniqueSuffix + "-" + file.originalname);
+    },
+});
+const upload = (0, multer_1.default)({ storage: storage });
+router.post('/test', (req, res) => {
+    console.log('Body:', req.body);
+    res.status(200).send('Received data');
+});
+// Create user and upload image
+router.post("/", upload.single("image"), async (req, res) => {
+    const { first_name, last_name, phone_num, mail, rank, floor, office_num, service, } = req.body;
+    const image = req.file ? req.file.path : null; // Local path of uploaded file
     try {
         const result = await db_1.default.query("INSERT INTO users (first_name, last_name, phone_num, mail, rank, floor, office_num, image, service) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *", [first_name, last_name, phone_num, mail, rank, floor, office_num, image, service]);
         res.status(201).json(result.rows[0]);
     }
     catch (err) {
-        console.error(err);
+        console.error("Error creating user:", err);
         res.status(500).send("Server error");
     }
 });
@@ -25,7 +47,7 @@ router.get("/", async (_req, res) => {
         res.status(200).json(result.rows);
     }
     catch (err) {
-        console.error(err);
+        console.error("Error fetching users:", err);
         res.status(500).send("Server error");
     }
 });
@@ -40,7 +62,7 @@ router.get("/:id", async (req, res) => {
         res.status(200).json(result.rows[0]);
     }
     catch (err) {
-        console.error(err);
+        console.error("Error fetching user by id:", err);
         res.status(500).send("Server error");
     }
 });
@@ -56,7 +78,7 @@ router.put("/:id", async (req, res) => {
         res.status(200).json(result.rows[0]);
     }
     catch (err) {
-        console.error(err);
+        console.error("Error updating user:", err);
         res.status(500).send("Server error");
     }
 });
@@ -71,7 +93,7 @@ router.delete("/:id", async (req, res) => {
         res.status(200).send("User deleted");
     }
     catch (err) {
-        console.error(err);
+        console.error("Error deleting user:", err);
         res.status(500).send("Server error");
     }
 });

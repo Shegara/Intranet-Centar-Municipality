@@ -5,6 +5,7 @@ import Image from "next/image";
 const DEFAULT_IMAGE_PATH = "/default.png";
 
 interface SearchResult {
+  id: number;
   first_name: string;
   last_name: string;
   image?: string;
@@ -76,10 +77,10 @@ const Results: React.FC<ResultsProps> = ({ searchResults }) => {
                   <div>
                     <strong>Služba:</strong> {item.service}
                   </div>
-                  <div className="mt-2">
+                  <div className="mt-4">
                     <strong>Pozicija:</strong> {item.rank}
                   </div>
-                  <div className="mt-2">
+                  <div className="mt-4">
                     <strong>Email:</strong>{" "}
                     <span className={getEmailClass(item.mail)}>
                       {item.mail}
@@ -89,6 +90,9 @@ const Results: React.FC<ResultsProps> = ({ searchResults }) => {
 
                 <div className="border-l border-gray-300 pl-4 flex flex-col items-center justify-center">
                   <div>
+                    <strong>ID:</strong> {item.id}
+                  </div>
+                  <div className="mt-2">
                     <strong>Sprat:</strong> {item.floor}
                   </div>
                   <div className="mt-2">

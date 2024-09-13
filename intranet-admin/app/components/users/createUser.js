@@ -26,7 +26,7 @@ const CreateUser = () => {
     rank: "",
     floor: "",
     office_num: "",
-    image: "",
+    image: null,
     service: "",
   });
 
@@ -46,12 +46,15 @@ const CreateUser = () => {
 
   const handleCreate = async () => {
     setLoading(true);
-  
+
     const formData = new FormData();
     for (const key in createUser) {
-      formData.append(key, createUser[key]);
+      // Append each field to FormData, including files
+      if (createUser[key] !== null) {
+        formData.append(key, createUser[key]);
+      }
     }
-  
+
     try {
       const response = await axios.post("http://localhost:8800/api/users", formData, {
         headers: {
