@@ -4,33 +4,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const multer_1 = __importDefault(require("multer"));
 const db_1 = __importDefault(require("../db"));
-const path_1 = __importDefault(require("path"));
-const fs_1 = __importDefault(require("fs"));
-const router = express_1.default.Router();
-const storage = multer_1.default.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadPath = path_1.default.join(__dirname, "../../uploads");
-        if (!fs_1.default.existsSync(uploadPath)) {
-            fs_1.default.mkdirSync(uploadPath);
+const multer_1 = __importDefault(require("multer"));
+const upload = (0, multer_1.default)({
+    dest: 'uploads/',
+    limits: { fileSize: 10 * 1024 * 1024 },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png|webp)$/)) {
+            return cb(new Error('Please upload a supported image file format: (jpg, jpeg, png, webp).'));
         }
-        cb(null, uploadPath);
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-        cb(null, uniqueSuffix + "-" + file.originalname);
-    },
+        cb(null, true);
+    }
 });
-const upload = (0, multer_1.default)({ storage: storage });
-router.post('/test', (req, res) => {
-    console.log('Body:', req.body);
-    res.status(200).send('Received data');
-});
-// Create user and upload image
-router.post("/", upload.single("image"), async (req, res) => {
+const router = express_1.default.Router();
+// Create user with file upload
+router.post("/", upload.single('image'), async (req, res) => {
     const { first_name, last_name, phone_num, mail, rank, floor, office_num, service, } = req.body;
-    const image = req.file ? req.file.path : null; // Local path of uploaded file
+    const image = req.file ? req.file.path : null;
     try {
         const result = await db_1.default.query("INSERT INTO users (first_name, last_name, phone_num, mail, rank, floor, office_num, image, service) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *", [first_name, last_name, phone_num, mail, rank, floor, office_num, image, service]);
         res.status(201).json(result.rows[0]);
@@ -51,7 +41,7 @@ router.get("/", async (_req, res) => {
         res.status(500).send("Server error");
     }
 });
-// Read user by id
+// Read user by ID
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
     try {
@@ -62,7 +52,7 @@ router.get("/:id", async (req, res) => {
         res.status(200).json(result.rows[0]);
     }
     catch (err) {
-        console.error("Error fetching user by id:", err);
+        console.error("Error fetching user by ID:", err);
         res.status(500).send("Server error");
     }
 });

@@ -3,7 +3,13 @@
 Intranet Centar Municipality
 
 # SETUP INSTRUCTIONS
-Installation
+## Prerequisites
+
+Ensure Node.js is installed. This includes npm (Node Package Manager). You can download and install Node.js from nodejs.org. Alternatively, you can use nvm to manage multiple Node.js versions. 
+
+Verify the installation with the command: npm - v  // this checks for the current NPM version installed on your machine
+
+## Installation
 
 Clone the repository
 git clone https://github.com/yourusername/intranet-centar-municipality.git
@@ -18,15 +24,21 @@ npm run build
 
 npm start
 
+the backend server will start at http://localhost:8800
+
 ## For the frontend
 cd client
 
 npm run dev
 
+render the frontend on your browser, usually at http://localhost:3000
+
 ## For the dashboard CMS 
 cd intranet-admin
 
 npm run dev
+
+render the CMS on your browser, usually at http://localhost:3000, unless the frontend app is running, in that case it will most likely re-route to http://localhost:3001
 
 # USAGE
 The Intranet Centar Municipality application is designed to provide a centralized hub for managing and accessing various employee and service data within the municipality. The application is split into two main interfaces:
