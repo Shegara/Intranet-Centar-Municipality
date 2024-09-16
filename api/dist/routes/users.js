@@ -5,13 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const db_1 = __importDefault(require("../db"));
-const multerConfig_1 = __importDefault(require("../config/multerConfig"));
+const multerConfig_1 = __importDefault(require("../config/multerConfig")); // Import the multer configuration
 const router = express_1.default.Router();
-router.post("/", multerConfig_1.default.single("image"), async (req, res) => {
+// POST route for creating a new user with image upload
+router.post("/", multerConfig_1.default.single('image'), async (req, res) => {
     try {
-        const { first_name, last_name, phone_num, mail, rank, floor, office_num, service, } = req.body;
-        const image = req.file ? `uploads/${req.file.filename}` : null;
-        const queryParams = [
+        const { first_name, last_name, phone_num, mail, rank, floor, office_num, service } = req.body;
+        const image = req.file?.filename; // Get the filename from multer
+        const result = await db_1.default.query("INSERT INTO users (first_name, last_name, phone_num, mail, rank, floor, office_num, image, service) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *", [
             first_name,
             last_name,
             phone_num,
@@ -20,9 +21,8 @@ router.post("/", multerConfig_1.default.single("image"), async (req, res) => {
             floor,
             office_num,
             image,
-            service
-        ];
-        const result = await db_1.default.query("INSERT INTO users (first_name, last_name, phone_num, mail, rank, floor, office_num, image, service) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *", queryParams);
+            service,
+        ]);
         res.status(201).json(result.rows[0]);
     }
     catch (err) {

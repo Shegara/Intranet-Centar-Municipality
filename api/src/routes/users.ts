@@ -1,28 +1,19 @@
-import express, { Request, Response } from "express";
-import pool from "../db";
-import upload from "../config/multerConfig";
+import express, { Request, Response } from 'express';
+import pool from '../db';
+import upload from '../config/multerConfig'; // Import the multer configuration
 
 const router = express.Router();
 
-router.post(
-  "/",
-  upload.single("image"),
-  async (req: Request, res: Response) => {
-    try {
-      const {
-        first_name,
-        last_name,
-        phone_num,
-        mail,
-        rank,
-        floor,
-        office_num,
-        service,
-      } = req.body;
-      
-      const image = req.file ? `uploads/${req.file.filename}` : null;
 
-      const queryParams = [
+// POST route for creating a new user with image upload
+router.post("/", upload.single('image'), async (req: Request, res: Response) => {
+  try {
+    const { first_name, last_name, phone_num, mail, rank, floor, office_num, service } = req.body;
+    const image = req.file?.filename; // Get the filename from multer
+
+    const result = await pool.query(
+      "INSERT INTO users (first_name, last_name, phone_num, mail, rank, floor, office_num, image, service) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
+      [
         first_name,
         last_name,
         phone_num,
@@ -31,20 +22,16 @@ router.post(
         floor,
         office_num,
         image,
-        service
+        service,
       ]
-      const result = await pool.query(
-        "INSERT INTO users (first_name, last_name, phone_num, mail, rank, floor, office_num, image, service) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
-        queryParams
-      );
+    );
 
-      res.status(201).json(result.rows[0]);
-    } catch (err) {
-      console.error("Error creating user:", err);
-      res.status(500).send("Server error");
-    }
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error("Error creating user:", err);
+    res.status(500).send("Server error");
   }
-);
+});
 
 // Read all users
 router.get("/", async (_req: Request, res: Response) => {

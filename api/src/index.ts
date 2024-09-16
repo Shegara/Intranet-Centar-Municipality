@@ -3,7 +3,6 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import userRoute from './routes/users';
 import docsRoute from './routes/docs';
-import path from 'path';
 
 dotenv.config();
 
@@ -13,9 +12,6 @@ const port = process.env.PORT || 8800;
 // Middleware setup
 app.use(cors());
 app.use(express.json());
-
-// Static files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API routes
 app.use('/api/users', userRoute);
