@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'; 
-const router = express.Router();
 import pool from '../db'; 
 
+const router = express.Router();
 interface Doc {
   id: number;
   name: string;

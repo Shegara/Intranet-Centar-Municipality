@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React from "react";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import Image from "next/image";
 
