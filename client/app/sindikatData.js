@@ -1,14 +1,14 @@
-const contentData = [
+const sindikatData = [
     {
-      title: "RUKOVODSTVO",
+      title: "Rukovodstvo",
       content: "<br> <strong>Predsjednik sindikata</strong> <br> <br> Elma Porča"
     },
     {
-      title: "PRAVILNICI",
+      title: "Pravilnici",
       content: "Trenutno prazno"
     },
     {
-      title: "UGOVORI SA FIRMAMA",
+      title: "Ugovori sa firmama",
       content: `<br> <strong>PLAZA DOO SARAJEVO</strong> – obračun rata je moguć na slijedeći način: iznos od 150,00 KM-300,00 KM (mogućnost kupovine na 3 rate), iznos od 300,00 KM – 600,00 KM (mogućnost kupovine na 4 rate), iznos od 600,00 KM i više (mogućnost kupovine na 6 rata); <br> 
       <strong>„VITAPUR“ DOO SARAJEVO</strong> – do 12 mjesečnih rata sa min mjesečnom ratom u visini 30,00 KM; <br> 
       <strong>CRYSTAL Optic doo Sarajevo</strong> – do 6 mjesečnih rata sa min mjesečnom ratom u visini 30,00 KM; <br> 
@@ -33,10 +33,10 @@ const contentData = [
       <strong>GEMA</strong> – (POPUST 10 % I KUPOVINA DO 4 MJESEČNE RATE).`
     },
     {
-      title: "IZVJEŠTAJI",
+      title: "Izvještaji",
       content: "Trenutno prazno"
     },
   ];
   
-  export default contentData;
+  export default sindikatData;
   

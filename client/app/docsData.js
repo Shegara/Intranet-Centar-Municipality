@@ -1,6 +1,6 @@
 const docsData = [
   {
-    title: "PRAVILNICI",
+    title: "Pravilnici",
     content: `
       04-Pravilnik – fiskalna procjena propisa.<br>
       Pravilnik o vlastitim prihodima OC
@@ -11,7 +11,7 @@ const docsData = [
     ]
   },
   {
-    title: "UPUSTVA",
+    title: "Uputstva",
     content: `
       Obrazac uz proceduru KUF-a (obrazac provjere usklađenosti računa)
     `,
@@ -20,7 +20,7 @@ const docsData = [
     ]
   },
   {
-    title: "MEMORANDUMI",
+    title: "Memorandumi",
     content: `
       01 – Općinsko vijeće<br>
       02 – Zajednički poslovi<br>
@@ -61,7 +61,7 @@ const docsData = [
     ]
   },
   {
-    title: "PROCEDURE",
+    title: "Procedure",
     content: `
       Procedura za povrat više ili pogrešno uplaćenih javnih prihoda OC 2022<br>
       Interni kontrolni postupci za evidentiranje i plaćanje ulaznih faktura procedura 2022

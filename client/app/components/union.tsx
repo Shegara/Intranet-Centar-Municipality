@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import contentData from '../contentData';
+import sindikatData from '../sindikatData';
 
 interface ContentItem {
   title: string;
@@ -39,7 +39,7 @@ const Union: React.FC = () => {
           Općinski Sindikat
         </header>
         <div className="grid grid-cols-1 gap-4 max-h-[550px] duration-500 ease-in-out overflow-y-auto transition-all">
-          {contentData.map((item: ContentItem, index: number) => (
+          {sindikatData.map((item: ContentItem, index: number) => (
             <div
               key={index}
               className="p-4 border border-gray-300 rounded"
