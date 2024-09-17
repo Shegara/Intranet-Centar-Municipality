@@ -7,6 +7,8 @@ Intranet Centar Municipality
 
 Ensure Node.js is installed. This includes npm (Node Package Manager). You can download and install Node.js from nodejs.org. Alternatively, you can use nvm to manage multiple Node.js versions. 
 
+npm install
+
 Verify the installation with the command: npm - v  // this checks for the current NPM version installed on your machine
 
 ## Installation
@@ -16,7 +18,13 @@ git clone https://github.com/yourusername/intranet-centar-municipality.git
 use cd to locate the folder once cloned (usually C:\Users\...)
 
 ## Start the backend server
-cd api 
+cd api (once you're in /intranet-centar-municipality folder path)
+
+npm install dotenv - installs the dotenv package that loads env variables 
+
+after installing, change the environment variables in the example.env file provided based on your credentials, rename it to .env after that 
+
+npm install multer - installs the multer middleware required for file uploads on the CMS
 
 npm run build
 
@@ -25,7 +33,9 @@ npm start
 the backend server will start at http://localhost:8800
 
 ## For the frontend
-cd client
+cd client (once you're in /intranet-centar-municipality folder path)
+
+npm install next react react-dom - installs react and nextjs 
 
 npm run dev
 
@@ -33,6 +43,8 @@ render the frontend on your browser, usually at http://localhost:3000
 
 ## For the dashboard CMS 
 cd intranet-admin
+
+npm install next react react-dom - installs react and nextjs 
 
 npm run dev
 
