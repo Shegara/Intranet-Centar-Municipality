@@ -21,8 +21,10 @@ interface ResultsProps {
   searchResults: SearchResult[];
 }
 
-const getNameClass = (firstName: string, lastName: string): string => {
-  const totalLength = firstName.length + lastName.length;
+const getNameClass = (firstName: string | null | undefined, lastName: string | null | undefined): string => {
+  const firstNameSafe = firstName || '';
+  const lastNameSafe = lastName || '';
+  const totalLength = firstNameSafe.length + lastNameSafe.length;
   
   if (totalLength >= 20) {
     return "text-sm"; 
@@ -33,8 +35,9 @@ const getNameClass = (firstName: string, lastName: string): string => {
   }
 };
 
-const getEmailClass = (mail: string): string => {
-  return mail.length >= 20 ? "text-sm" : "text-base";
+const getEmailClass = (mail: string | null | undefined): string => {
+  const mailSafe = mail || '';
+  return mailSafe.length >= 20 ? "text-sm" : "text-base";
 };
 
 const Results: React.FC<ResultsProps> = ({ searchResults }) => {

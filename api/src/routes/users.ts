@@ -1,15 +1,14 @@
 import express, { Request, Response } from 'express';
 import pool from '../db';
-import upload from '../config/multerConfig'; // Import the multer configuration
+import upload from '../config/multerConfig'; 
 
 const router = express.Router();
-
 
 // POST route for creating a new user with image upload
 router.post("/", upload.single('image'), async (req: Request, res: Response) => {
   try {
     const { first_name, last_name, phone_num, mail, rank, floor, office_num, service } = req.body;
-    const image = req.file?.filename; // Get the filename from multer
+    const image = req.file?.filename; 
 
     const result = await pool.query(
       "INSERT INTO users (first_name, last_name, phone_num, mail, rank, floor, office_num, image, service) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
