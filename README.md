@@ -15,8 +15,6 @@ Clone the repository
 git clone https://github.com/yourusername/intranet-centar-municipality.git
 use cd to locate the folder once cloned (usually C:\Users\...)
 
-Install dependencies if necessary
-
 ## Start the backend server
 cd api 
 
