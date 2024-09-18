@@ -5,16 +5,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const db_1 = __importDefault(require("../db"));
+const multerConfig_1 = __importDefault(require("../config/multerConfig"));
 const router = express_1.default.Router();
 // C - Create
-router.post("/", async (req, res) => {
-    const { name, category } = req.body;
+router.post("/", multerConfig_1.default.single('document'), async (req, res) => {
     try {
-        const result = await db_1.default.query("INSERT INTO docs (name, category) VALUES ($1, $2) RETURNING *", [name, category]);
+        const { category, name } = req.body;
+        const document = 'http://localhost:8800/uploads/' + req.file?.filename;
+        const result = await db_1.default.query("INSERT INTO docs (name, category, document) VALUES ($1, $2, $3) RETURNING *", [name, category, document]);
         res.status(201).json(result.rows[0]);
     }
     catch (err) {
-        console.error(err);
+        console.error("Error creating document:", err);
         res.status(500).send("Server error");
     }
 });
@@ -45,22 +47,23 @@ router.get("/:id", async (req, res) => {
     }
 });
 // U - Update
-router.put("/:id", async (req, res) => {
+router.put("/:id", multerConfig_1.default.single('document'), async (req, res) => {
     const { id } = req.params;
     const { name, category } = req.body;
+    const documentURL = req.file ? 'http://localhost:8800/uploads/' + req.file.filename : null;
     try {
-        const result = await db_1.default.query("UPDATE docs SET name = $1, category = $2 WHERE id = $3 RETURNING *", [name, category, id]);
+        const result = await db_1.default.query("UPDATE docs SET name = $1, category = $2, document = $3 WHERE id = $4 RETURNING *", [name, category, documentURL || null, id]);
         if (result.rows.length === 0) {
             return res.status(404).send("Document not found");
         }
         res.status(200).json(result.rows[0]);
     }
     catch (err) {
-        console.error(err);
+        console.error("Error updating document:", err);
         res.status(500).send("Server error");
     }
 });
-// D - Delete
+// D - Delete 
 router.delete("/:id", async (req, res) => {
     const { id } = req.params;
     try {
@@ -71,7 +74,7 @@ router.delete("/:id", async (req, res) => {
         res.status(200).send("Document deleted");
     }
     catch (err) {
-        console.error(err);
+        console.error("Error deleting document:", err);
         res.status(500).send("Server error");
     }
 });
