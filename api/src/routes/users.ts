@@ -31,6 +31,51 @@ router.post("/", upload.single('image'), async (req: Request, res: Response) => 
   }
 });
 
+//PUT route for user update 
+router.put("/:id", upload.single('image'), async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const {
+    first_name,
+    last_name,
+    phone_num,
+    mail,
+    rank,
+    floor,
+    office_num,
+    service,
+  } = req.body;
+
+  // Handle file upload
+  const image = req.file ? 'http://localhost:8800/uploads/' + req.file.filename : null;
+
+  try {
+    const result = await pool.query(
+      "UPDATE users SET first_name = $1, last_name = $2, phone_num = $3, mail = $4, rank = $5, floor = $6, office_num = $7, image = $8, service = $9 WHERE id = $10 RETURNING *",
+      [
+        first_name,
+        last_name,
+        phone_num,
+        mail,
+        rank,
+        floor,
+        office_num,
+        image || null, 
+        service,
+        id,
+      ]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).send("User not found");
+    }
+
+    res.status(200).json(result.rows[0]);
+  } catch (err) {
+    console.error("Error updating user:", err);
+    res.status(500).send("Server error");
+  }
+});
+
 // Read all users
 router.get("/", async (_req: Request, res: Response) => {
   try {
@@ -57,46 +102,6 @@ router.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
-// Update user
-router.put("/:id", async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const {
-    first_name,
-    last_name,
-    phone_num,
-    mail,
-    rank,
-    floor,
-    office_num,
-    image,
-    service,
-  } = req.body;
-
-  try {
-    const result = await pool.query(
-      "UPDATE users SET first_name = $1, last_name = $2, phone_num = $3, mail = $4, rank = $5, floor = $6, office_num = $7, image = $8, service = $9 WHERE id = $10 RETURNING *",
-      [
-        first_name,
-        last_name,
-        phone_num,
-        mail,
-        rank,
-        floor,
-        office_num,
-        image,
-        service,
-        id,
-      ]
-    );
-    if (result.rows.length === 0) {
-      return res.status(404).send("User not found");
-    }
-    res.status(200).json(result.rows[0]);
-  } catch (err) {
-    console.error("Error updating user:", err);
-    res.status(500).send("Server error");
-  }
-});
 
 // Delete user
 router.delete("/:id", async (req: Request, res: Response) => {
