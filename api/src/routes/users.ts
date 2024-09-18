@@ -8,8 +8,7 @@ const router = express.Router();
 router.post("/", upload.single('image'), async (req: Request, res: Response) => {
   try {
     const { first_name, last_name, phone_num, mail, rank, floor, office_num, service } = req.body;
-    const image = req.file?.filename; 
-
+    const image = req.file ? 'http://localhost:8800/uploads/' + req.file?.filename : null; 
     const result = await pool.query(
       "INSERT INTO users (first_name, last_name, phone_num, mail, rank, floor, office_num, image, service) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
       [

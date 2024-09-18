@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
+import path from 'path';
 import cors from 'cors';
 import userRoute from './routes/users';
 import docsRoute from './routes/docs';
@@ -8,6 +9,10 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8800;
+
+
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Middleware setup
 app.use(cors());
