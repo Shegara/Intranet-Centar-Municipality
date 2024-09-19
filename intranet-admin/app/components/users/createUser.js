@@ -127,7 +127,7 @@ const CreateUser = () => {
                 </>
               ) : (
                 <input
-                  type={key === "floor" ? "number" : "text"}
+                  type="text"
                   name={key}
                   value={createUser[key]}
                   onChange={handleCreateChange}

@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Results from "./results";
 import XIcon from '@mui/icons-material/HighlightOffSharp';
+import {officeNumbers, floorNumbers, serviceNumbers} from '../staticData';
+
 
 interface FilterOptions {
   floor: string;
@@ -50,7 +52,7 @@ const Search: React.FC = () => {
       setSearchResults([]);
       return;
     }
-
+  
     const fetchUsers = async () => {
       setLoading(true);
       try {
@@ -63,9 +65,9 @@ const Search: React.FC = () => {
           const floor = item.floor ? item.floor.toString().toLowerCase() : '';
           const officeNum = item.office_num ? item.office_num.toString().toLowerCase() : '';
           const service = item.service ? item.service.toLowerCase() : '';
-
+  
           const searchTermLower = searchTerm.toLowerCase();
-
+  
           return (
             (filterOptions.floor === "" || filterOptions.floor.toLowerCase() === floor) &&
             (filterOptions.officeNum === "" || filterOptions.officeNum.toLowerCase() === officeNum) &&
@@ -82,7 +84,7 @@ const Search: React.FC = () => {
             )
           );
         });
-
+  
         setSearchResults(filteredResults);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -90,7 +92,7 @@ const Search: React.FC = () => {
         setLoading(false);
       }
     };
-
+  
     fetchUsers();
   }, [filterOptions, searchTerm]);
 
@@ -144,37 +146,19 @@ const Search: React.FC = () => {
         <div className="flex mb-4 space-x-4">
           <FilterBox
             label="Sprat"
-            options={["", "Prizemlje", "2", "3"]}
+            options={["", ...floorNumbers]}
             value={filterOptions.floor}
             onChange={(value) => handleFilterChange("floor", value)}
           />
           <FilterBox
             label="Kancelarija br."
-            options={["", "211", "215", "220", "230", "337"]}
+            options={["", ...officeNumbers]}
             value={filterOptions.officeNum}
             onChange={(value) => handleFilterChange("officeNum", value)}
           />
           <FilterBox
             label="Služba"
-            options={[
-              "",
-              "01 - Općinsko vijeće",
-              "02 - Zajednički poslovi",
-              "03 - Stambeno i komunalno", 
-              "04 - Finansije",
-              "05 - Imovinsko pravni poslovi geodetski poslovi i katastar nekretnina",
-              "06 - Inspektorat",
-              "07 - Prostorno uređenje i investicije",
-              "08 - Opća uprava",
-              "09 - Boračko-invalidska zaštita i socijalna zaštita",
-              "10 - Kabinet općinskog načelnika",
-              "11 - LER i mjesna samouprava",
-              "12 - Ured za internu reviziju",
-              "13 - Obrazovanje, kultura i sport",
-              "14 - Pravobranilaštvo",
-              "16 - Privreda i poslovni prostori",
-              "17 - Civilna zaštita"
-            ]}
+            options={serviceNumbers}
             value={filterOptions.service}
             onChange={(value) => handleFilterChange("service", value)}
           />

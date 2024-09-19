@@ -17,18 +17,24 @@ interface DocItem {
 const Docs: React.FC = () => {
   const [docs, setDocs] = useState<DocItem[]>([]);
   const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({});
+  const [loading, setLoading] = useState<boolean>(true); 
+  const [error, setError] = useState<string | null>(null);
   const contentRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   useEffect(() => {
     const fetchDocs = async () => {
       try {
+        setLoading(true); 
         const response = await axios.get<DocItem[]>('http://localhost:8800/api/docs'); 
         const data = response.data;
         setDocs(data);
         const categories = Array.from(new Set(data.map(doc => doc.category)));
         setExpanded(categories.reduce((acc, category) => ({ ...acc, [category]: false }), {}));
       } catch (error) {
+        setError('Failed to fetch documents. Please try again later.');
         console.error('Error fetching documents:', error);
+      } finally {
+        setLoading(false); 
       }
     };
 
@@ -60,6 +66,22 @@ const Docs: React.FC = () => {
     (acc[doc.category] = acc[doc.category] || []).push(doc);
     return acc;
   }, {} as { [key: string]: DocItem[] });
+
+  if (loading) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="text-3xl text-white">Učitavam...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="text-2xl text-red-600">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-black via-transparent to-transparent">

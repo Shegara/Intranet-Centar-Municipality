@@ -143,7 +143,7 @@ const UpdateUser = () => {
                 </>
               ) : (
                 <input
-                  type={key === "floor" ? "number" : "text"}
+                  type="text"
                   name={key}
                   value={updateUser[key]}
                   onChange={handleUpdateChange}
