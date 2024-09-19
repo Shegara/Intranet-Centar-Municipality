@@ -1,71 +1,65 @@
 'use client';
 
-import React, { useState, useRef, useEffect, MutableRefObject } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import DownloadIcon from '@mui/icons-material/Download';
-import docsData from '../docsData';
 import parse from 'html-react-parser';
+import axios from 'axios';
 
 interface DocItem {
-  title: string;
-  content: string;
-  files: string[];
+  id: number;
+  name: string;
+  category: string;
+  document: string; 
 }
 
 const Docs: React.FC = () => {
-  const [expanded, setExpanded] = useState<boolean[]>([false, false, false, false]);
-  const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [docs, setDocs] = useState<DocItem[]>([]);
+  const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({});
+  const contentRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
-  const toggleExpand = (index: number) => {
-    setExpanded((prevState) => {
-      const newState = [...prevState];
-      newState[index] = !newState[index];
-      return newState;
-    });
+  useEffect(() => {
+    const fetchDocs = async () => {
+      try {
+        const response = await axios.get<DocItem[]>('http://localhost:8800/api/docs'); 
+        const data = response.data;
+        setDocs(data);
+        const categories = Array.from(new Set(data.map(doc => doc.category)));
+        setExpanded(categories.reduce((acc, category) => ({ ...acc, [category]: false }), {}));
+      } catch (error) {
+        console.error('Error fetching documents:', error);
+      }
+    };
+
+    fetchDocs();
+  }, []);  
+
+  const toggleExpand = (category: string) => {
+    setExpanded(prevState => ({ ...prevState, [category]: !prevState[category] }));
   };
 
   useEffect(() => {
-    contentRefs.current.forEach((ref, index) => {
+    Object.entries(contentRefs.current).forEach(([category, ref]) => {
       if (ref) {
-        ref.style.transition = 'max-height 0.6s ease-in-out, opacity 0.6s ease-in-out';
-        ref.style.opacity = expanded[index] ? '1' : '0';
-        ref.style.maxHeight = expanded[index] ? `${ref.scrollHeight}px` : '0px';
+        ref.style.transition = 'max-height 0.3s ease-in-out, opacity 0.3s ease-in-out';
+        ref.style.opacity = expanded[category] ? '1' : '0';
+        ref.style.maxHeight = expanded[category] ? `${ref.scrollHeight}px` : '0px';
       }
     });
   }, [expanded]);
 
   const handleDownload = (file: string) => {
     const link = document.createElement('a');
-    link.href = `/documents${file}`;
-    link.download = file.split('/').pop() || '';
+    link.href = file; 
+    link.download = file.split('/').pop() || ''; 
     link.click();
   };
 
-  const renderContentWithIcons = (content: string, files: string[]) => {
-    let lines = content.split('<br>').filter(line => line.trim() !== '');
-
-    if (lines.length === 0) {
-      lines = [content];
-    }
-
-    return lines.map((line, index) => (
-      <React.Fragment key={index}>
-        {index === 0 && <br />}
-        <div className="flex items-center justify-between">
-          <span className="flex-grow">{parse(line)}</span>
-          {files[index] && (
-            <DownloadIcon
-              fontSize="medium"
-              className="text-red-700 cursor-pointer hover:opacity-60"
-              onClick={() => handleDownload(files[index])}
-            />
-          )}
-        </div>
-        {index < lines.length - 1 && <hr className="my-2 border-gray-400" />}
-      </React.Fragment>
-    ));
-  };
+  const groupedDocs = docs.reduce((acc, doc) => {
+    (acc[doc.category] = acc[doc.category] || []).push(doc);
+    return acc;
+  }, {} as { [key: string]: DocItem[] });
 
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-black via-transparent to-transparent">
@@ -74,15 +68,15 @@ const Docs: React.FC = () => {
           Općinski Dokumenti
         </header>
         <div className="grid grid-cols-1 gap-4 max-h-[550px] overflow-y-auto">
-          {docsData.map((item: DocItem, index: number) => (
-            <div key={index} className="p-4 border border-gray-300 rounded">
+          {Object.entries(groupedDocs).map(([category, docs]) => (
+            <div key={category} className="p-4 border border-gray-300 rounded">
               <div className="flex justify-between items-center">
-                <h2 className="text-lg font-semibold">{item.title}</h2>
+                <h2 className="text-lg font-semibold">{category}</h2>
                 <button
                   className="flex items-center justify-center w-8 h-8 text-white bg-red-700 rounded-full hover:opacity-80"
-                  onClick={() => toggleExpand(index)}
+                  onClick={() => toggleExpand(category)}
                 >
-                  {expanded[index] ? (
+                  {expanded[category] ? (
                     <CloseIcon fontSize="medium" />
                   ) : (
                     <AddIcon fontSize="medium" />
@@ -90,10 +84,21 @@ const Docs: React.FC = () => {
                 </button>
               </div>
               <div
-                ref={(el) => (contentRefs.current[index] = el)}
+                ref={(el) => (contentRefs.current[category] = el)}
                 className={`transition-max-height duration-500 ease-in-out overflow-hidden max-h-0`}
               >
-                {renderContentWithIcons(item.content, item.files)}
+                {docs.map((item) => (
+                  <div key={item.id} className="mt-4 flex items-center justify-between p-2 border-b border-gray-300">
+                    <span className="flex-grow">{parse(item.name)}</span>
+                    {item.document && (
+                      <DownloadIcon
+                        fontSize="medium"
+                        className="text-red-700 cursor-pointer hover:opacity-60"
+                        onClick={() => handleDownload(item.document)}
+                      />
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
           ))}
