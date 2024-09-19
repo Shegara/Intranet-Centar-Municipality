@@ -6,13 +6,13 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const DeleteDocs = () => {
-  const [docId, setDocId] = useState(""); // Capture the document ID
+  const [docId, setDocId] = useState("");
 
   const handleDelete = async () => {
     try {
       await axios.delete(`http://localhost:8800/api/docs/${docId}`);
       toast.success("Dokument uspješno obrisan");
-      setDocId(""); // Reset the field
+      setDocId("");
     } catch (error) {
       console.error("Error during delete:", error);
       toast.error("Greška prilikom brisanja dokumenta");

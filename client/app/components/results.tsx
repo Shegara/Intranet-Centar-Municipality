@@ -99,7 +99,7 @@ const Results: React.FC<ResultsProps> = ({ searchResults }) => {
                     <strong>Sprat:</strong> {item.floor}
                   </div>
                   <div className="mt-2">
-                    <strong>Broj Kancelarije:</strong> {item.office_num}
+                    <strong>Broj Ureda:</strong> {item.office_num}
                   </div>
                   <div className="mt-2">
                     <LocalPhoneIcon className="mr-2 inline-block mt-2" />
@@ -147,7 +147,7 @@ const Results: React.FC<ResultsProps> = ({ searchResults }) => {
                   <strong>Sprat:</strong> {item.floor}
                 </div>
                 <div className="mt-2">
-                  <strong>Broj Kancelarije:</strong> {item.office_num}
+                  <strong>Broj Ureda:</strong> {item.office_num}
                 </div>
                 <div className="mt-2 flex items-center">
                   <LocalPhoneIcon className="mr-2" />
