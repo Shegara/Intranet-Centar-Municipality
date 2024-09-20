@@ -24,7 +24,7 @@ const Main: React.FC = () => {
             cursor-pointer text-white"
           >
             <ContactPhoneIcon style={{ fontSize: 80, color: "white" }} />
-            <span className="mt-4 text-xl">Imenik</span>
+            <span className="mt-4 text-xl sm:text-2xl">Imenik</span>
           </a>
           <a
             href="/pages/sluzbe"
@@ -35,7 +35,7 @@ const Main: React.FC = () => {
             cursor-pointer text-white"
           >
             <WorkIcon style={{ fontSize: 80, color: "white" }} />
-            <span className="mt-4 text-xl">Službe</span>
+            <span className="mt-4 text-xl sm:text-2xl">Službe</span>
           </a>
           <a
             href="/pages/sindikat"
@@ -46,7 +46,7 @@ const Main: React.FC = () => {
             cursor-pointer text-white"
           >
             <Groups2Icon style={{ fontSize: 80, color: "white" }} />
-            <span className="mt-4 text-xl">Sindikat</span>
+            <span className="mt-4 text-xl sm:text-2xl">Sindikat</span>
           </a>
           <a
             href="/pages/dokumenti"
@@ -57,7 +57,7 @@ const Main: React.FC = () => {
             cursor-pointer text-white"
           >
             <FolderIcon style={{ fontSize: 80, color: "white" }} />
-            <span className="mt-4 text-xl">Dokumenti</span>
+            <span className="mt-4 text-xl sm:text-2xl">Dokumenti</span>
           </a>
         </div>
       </div>
