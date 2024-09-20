@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import DownloadIcon from '@mui/icons-material/Download';
-import parse from 'html-react-parser';
 import axios from 'axios';
 
 interface DocItem {
@@ -111,7 +110,10 @@ const Docs: React.FC = () => {
               >
                 {docs.map((item) => (
                   <div key={item.id} className="mt-4 flex items-center justify-between p-2 border-b border-gray-300">
-                    <span className="flex-grow">{parse(item.name)}</span>
+                    <div>           
+                      {item.name}
+                      <span className="ml-8 font-semibold">ID:</span> {item.id}
+                    </div>
                     {item.document && (
                       <DownloadIcon
                         fontSize="medium"
