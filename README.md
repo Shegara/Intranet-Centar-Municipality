@@ -11,10 +11,12 @@ npm install
 
 Verify the installation with the command: npm - v  // this checks for the current NPM version installed on your machine
 
+Ensure that Git is installed.
+
 ## Installation
 
 Clone the repository
-git clone https://github.com/yourusername/intranet-centar-municipality.git
+git clone https://github.com/shegara/intranet-centar-municipality.git
 use cd to locate the folder once cloned (usually C:\Users\...)
 
 ## Start the backend server
