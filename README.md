@@ -22,22 +22,20 @@ use cd to locate the folder once cloned (usually C:\Users\...)
 ## Start the backend server
 cd api (once you're in /intranet-centar-municipality folder path)
 
-npm install dotenv - installs the dotenv package that loads env variables 
-
-after installing, change the environment variables in the example.env file provided based on your credentials, rename it to .env after that 
-
-npm install multer - installs the multer middleware required for file uploads on the CMS
+npm install dotenv multer 
 
 npm run build
 
 npm start
+
+after installing, change the environment variables in the example.env file provided based on your credentials, rename it to .env after that 
 
 the backend server will start at http://localhost:8800
 
 ## For the frontend
 cd client (once you're in /intranet-centar-municipality folder path)
 
-npm install next react react-dom - installs react and nextjs 
+npm install next react react-dom axios pg - installs react and nextjs 
 
 npm run dev
 

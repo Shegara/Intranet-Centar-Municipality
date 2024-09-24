@@ -11,7 +11,7 @@ const pool = new pg_1.Pool({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    port: parseInt(process.env.DB_PORT || '5432', 10),
+    port: parseInt(process.env.DB_PORT || '6543', 10),
 });
 pool.on('connect', () => {
     console.log('Connected to PostgreSQL database.');
