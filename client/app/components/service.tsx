@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import AddIcon from "@mui/icons-material/Add";
@@ -26,7 +24,7 @@ const Service: React.FC = () => {
   const [services, setServices] = useState<Services>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const contentRefs = useRef<HTMLDivElement[]>([]);
+  const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -155,7 +153,7 @@ const Service: React.FC = () => {
                   </div>
                 </div>
                 <div
-                  ref={(el) => (contentRefs.current[index] = el!)}
+                  ref={(el: HTMLDivElement | null) => (contentRefs.current[index] = el)}
                   className={`transition-max-height duration-500 ease-in-out overflow-hidden max-h-0`}
                 >
                   <div className="relative">

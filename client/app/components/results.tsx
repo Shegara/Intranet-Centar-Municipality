@@ -1,8 +1,5 @@
 import React from "react";
-import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
-import Image from "next/image";
-
-const DEFAULT_IMAGE_PATH = "/default.png";
+import UserCard from "./userCard";
 
 interface SearchResult {
   id: number;
@@ -50,111 +47,22 @@ const Results: React.FC<ResultsProps> = ({ searchResults }) => {
       {sortedResults.length > 0 ? (
         <>
           <h2 className="text-lg font-medium mb-2">Rezultati pretrage:</h2>
-          {sortedResults.map((item, index) => (
-            <div
-              key={index}
-              className="mb-4 p-4 border border-gray-300 rounded-md hidden md:block"
-            >
-              <div className="grid grid-cols-4 gap-4">
-                <div className="col-span-1 flex items-center">
-                  <div className="w-30 h-30 rounded-lg overflow-hidden mr-4 border-2 border-red-500">
-                    <Image
-                      src={item.image || DEFAULT_IMAGE_PATH}
-                      alt="Img"
-                      width={60}
-                      height={60}
-                      className="rounded-lg"
-                    />
-                  </div>
-                  <div>
-                    <div className={getNameClass(item.first_name, item.last_name)}>
-                      {item.first_name}
-                    </div>
-                    <div className={getNameClass(item.first_name, item.last_name) + " mt-2"}>
-                      {item.last_name}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-span-2 border-l border-gray-300 pl-4 flex flex-col justify-center">
-                  <div>
-                    <strong>Služba:</strong> {item.service}
-                  </div>
-                  <div className="mt-4">
-                    <strong>Pozicija:</strong> {item.rank}
-                  </div>
-                  <div className="mt-4">
-                    <strong>Email:</strong>{" "}
-                    <span className={getEmailClass(item.mail)}>
-                      {item.mail}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="border-l border-gray-300 pl-4 flex flex-col items-center justify-center">
-                  <div>
-                    <strong>ID:</strong> {item.id}
-                  </div>
-                  <div className="mt-2">
-                    <strong>Sprat:</strong> {item.floor}
-                  </div>
-                  <div className="mt-2">
-                    <strong>Broj Ureda:</strong> {item.office_num}
-                  </div>
-                  <div className="mt-2">
-                    <LocalPhoneIcon className="mr-2 inline-block mt-2" />
-                    {item.phone_num}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-
-          {sortedResults.map((item, index) => (
-            <div
-              key={index}
-              className="md:hidden mb-4 p-4 border border-gray-300 rounded-md"
-            >
-              <div className="flex items-center mb-4">
-                <div className="rounded-lg overflow-hidden mr-4 border-2 border-red-500">
-                  <Image
-                    src={item.image || DEFAULT_IMAGE_PATH}
-                    alt="Img"
-                    width={60}
-                    height={60}
-                    className="rounded-lg"
-                  />
-                </div>
-                <div>
-                  <div className={getNameClass(item.first_name, item.last_name)}>
-                    {item.first_name} {item.last_name}
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <div>
-                  <strong>Služba:</strong> {item.service}
-                </div>
-                <div className="mt-2">
-                  <strong>Pozicija:</strong> {item.rank}
-                </div>
-                <div className="mt-2">
-                  <strong>Email:</strong>{" "}
-                  <span className={getEmailClass(item.mail)}>{item.mail}</span>
-                </div>
-                <div className="mt-2">
-                  <strong>Sprat:</strong> {item.floor}
-                </div>
-                <div className="mt-2">
-                  <strong>Broj Ureda:</strong> {item.office_num}
-                </div>
-                <div className="mt-2 flex items-center">
-                  <LocalPhoneIcon className="mr-2" />
-                  {item.phone_num}
-                </div>
-              </div>
-            </div>
+          {sortedResults.map((item) => (
+            <UserCard
+              key={item.id}
+              id={item.id}
+              firstName={item.first_name}
+              lastName={item.last_name}
+              image={item.image}
+              service={item.service}
+              rank={item.rank}
+              mail={item.mail}
+              floor={item.floor}
+              officeNum={item.office_num}
+              phoneNum={item.phone_num}
+              getNameClass={getNameClass}
+              getEmailClass={getEmailClass}
+            />
           ))}
         </>
       ) : (

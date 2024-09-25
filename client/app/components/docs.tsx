@@ -1,63 +1,76 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
-import DownloadIcon from '@mui/icons-material/Download';
-import axios from 'axios';
+import React, { useState, useRef, useEffect } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import CloseIcon from "@mui/icons-material/Close";
+import DownloadIcon from "@mui/icons-material/Download";
+import axios from "axios";
 
 interface DocItem {
   id: number;
   name: string;
   category: string;
-  document: string; 
+  document: string;
 }
 
 const Docs: React.FC = () => {
   const [docs, setDocs] = useState<DocItem[]>([]);
   const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({});
-  const [loading, setLoading] = useState<boolean>(true); 
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const contentRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   useEffect(() => {
     const fetchDocs = async () => {
       try {
-        setLoading(true); 
-        const response = await axios.get<DocItem[]>('http://localhost:8800/api/docs'); 
+        setLoading(true);
+        const response = await axios.get<DocItem[]>(
+          "http://localhost:8800/api/docs"
+        );
         const data = response.data;
         setDocs(data);
-        const categories = Array.from(new Set(data.map(doc => doc.category)));
-        setExpanded(categories.reduce((acc, category) => ({ ...acc, [category]: false }), {}));
+        const categories = Array.from(new Set(data.map((doc) => doc.category)));
+        setExpanded(
+          categories.reduce(
+            (acc, category) => ({ ...acc, [category]: false }),
+            {}
+          )
+        );
       } catch (error) {
-        setError('Failed to fetch documents. Please try again later.');
-        console.error('Error fetching documents:', error);
+        setError("Failed to fetch documents. Please try again later.");
+        console.error("Error fetching documents:", error);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
     fetchDocs();
-  }, []);  
+  }, []);
 
   const toggleExpand = (category: string) => {
-    setExpanded(prevState => ({ ...prevState, [category]: !prevState[category] }));
+    setExpanded((prevState) => ({
+      ...prevState,
+      [category]: !prevState[category],
+    }));
   };
 
   useEffect(() => {
     Object.entries(contentRefs.current).forEach(([category, ref]) => {
       if (ref) {
-        ref.style.transition = 'max-height 0.3s ease-in-out, opacity 0.3s ease-in-out';
-        ref.style.opacity = expanded[category] ? '1' : '0';
-        ref.style.maxHeight = expanded[category] ? `${ref.scrollHeight}px` : '0px';
+        ref.style.transition =
+          "max-height 0.3s ease-in-out, opacity 0.3s ease-in-out";
+        ref.style.opacity = expanded[category] ? "1" : "0";
+        ref.style.maxHeight = expanded[category]
+          ? `${ref.scrollHeight}px`
+          : "0px";
       }
     });
   }, [expanded]);
 
   const handleDownload = (file: string) => {
-    const link = document.createElement('a');
-    link.href = file; 
-    link.download = file.split('/').pop() || ''; 
+    const link = document.createElement("a");
+    link.href = file;
+    link.download = file.split("/").pop() || "";
     link.click();
   };
 
@@ -105,12 +118,17 @@ const Docs: React.FC = () => {
                 </button>
               </div>
               <div
-                ref={(el) => (contentRefs.current[category] = el)}
+                ref={(el) => {
+                  contentRefs.current[category] = el;
+                }}
                 className={`transition-max-height duration-500 ease-in-out overflow-hidden max-h-0`}
               >
                 {docs.map((item) => (
-                  <div key={item.id} className="mt-4 flex items-center justify-between p-2 border-b border-gray-300">
-                    <div>           
+                  <div
+                    key={item.id}
+                    className="mt-4 flex items-center justify-between p-2 border-b border-gray-300"
+                  >
+                    <div>
                       {item.name}
                       <span className="ml-8 font-semibold">ID:</span> {item.id}
                     </div>

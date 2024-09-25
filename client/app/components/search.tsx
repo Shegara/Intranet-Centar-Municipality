@@ -4,8 +4,7 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Results from "./results";
 import XIcon from '@mui/icons-material/HighlightOffSharp';
-import {officeNumbers, floorNumbers, serviceNumbers} from '../staticData';
-
+import { officeNumbers, floorNumbers, serviceNumbers } from '../staticData';
 
 interface FilterOptions {
   floor: string;
@@ -14,6 +13,7 @@ interface FilterOptions {
 }
 
 interface User {
+  id: number;
   first_name: string;
   last_name: string;
   rank: string;
@@ -25,6 +25,8 @@ interface User {
   phone_num: string;
 }
 
+interface SearchResult extends User {}
+
 const Search: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
@@ -32,11 +34,11 @@ const Search: React.FC = () => {
     officeNum: "",
     service: "",
   });
-  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleFilterChange = (filter: keyof FilterOptions, value: string) => {
-    setFilterOptions({ ...filterOptions, [filter]: value });
+    setFilterOptions((prev) => ({ ...prev, [filter]: value }));
   };
 
   const clearSearch = () => {
@@ -48,43 +50,36 @@ const Search: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!isFilterOrSearchActive()) {
-      setSearchResults([]);
-      return;
-    }
-  
     const fetchUsers = async () => {
+      if (!isFilterOrSearchActive()) {
+        setSearchResults([]);
+        return;
+      }
+
       setLoading(true);
       try {
-        const response = await axios.get<User[]>('http://localhost:8800/api/users');
-        const filteredResults = response.data.filter((item) => {
-          const firstName = item.first_name ? item.first_name.toLowerCase() : '';
-          const lastName = item.last_name ? item.last_name.toLowerCase() : '';
-          const rank = item.rank ? item.rank.toLowerCase() : '';
-          const mail = item.mail ? item.mail.toLowerCase() : '';
-          const floor = item.floor ? item.floor.toString().toLowerCase() : '';
-          const officeNum = item.office_num ? item.office_num.toString().toLowerCase() : '';
-          const service = item.service ? item.service.toLowerCase() : '';
-  
+        const { data } = await axios.get<User[]>('http://localhost:8800/api/users');
+        const filteredResults = data.filter((user) => {
+          const { first_name, last_name, rank, mail, floor, office_num, service } = user;
           const searchTermLower = searchTerm.toLowerCase();
-  
+
           return (
-            (filterOptions.floor === "" || filterOptions.floor.toLowerCase() === floor) &&
-            (filterOptions.officeNum === "" || filterOptions.officeNum.toLowerCase() === officeNum) &&
-            (filterOptions.service === "" || filterOptions.service.toLowerCase() === service) &&
+            (filterOptions.floor === "" || (floor && filterOptions.floor.toLowerCase() === floor.toLowerCase())) &&
+            (filterOptions.officeNum === "" || (office_num && filterOptions.officeNum.toLowerCase() === office_num.toLowerCase())) &&
+            (filterOptions.service === "" || (service && filterOptions.service.toLowerCase() === service.toLowerCase())) &&
             (
-              firstName.includes(searchTermLower) ||
-              lastName.includes(searchTermLower) ||
-              (firstName + ' ' + lastName).includes(searchTermLower) ||
-              rank.includes(searchTermLower) ||
-              mail.includes(searchTermLower) ||
-              floor.includes(searchTermLower) ||
-              officeNum.includes(searchTermLower) ||
-              service.includes(searchTermLower)
+              (first_name && first_name.toLowerCase().includes(searchTermLower)) ||
+              (last_name && last_name.toLowerCase().includes(searchTermLower)) ||
+              (first_name && last_name && `${first_name} ${last_name}`.toLowerCase().includes(searchTermLower)) ||
+              (rank && rank.toLowerCase().includes(searchTermLower)) ||
+              (mail && mail.toLowerCase().includes(searchTermLower)) ||
+              (floor && floor.toLowerCase().includes(searchTermLower)) ||
+              (office_num && office_num.toLowerCase().includes(searchTermLower)) ||
+              (service && service.toLowerCase().includes(searchTermLower))
             )
           );
         });
-  
+
         setSearchResults(filteredResults);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -92,7 +87,7 @@ const Search: React.FC = () => {
         setLoading(false);
       }
     };
-  
+
     fetchUsers();
   }, [filterOptions, searchTerm]);
 
@@ -101,33 +96,27 @@ const Search: React.FC = () => {
     options: string[];
     value: string;
     onChange: (value: string) => void;
-  }> = ({ label, options, value, onChange }) => {
-    return (
-      <div className="flex-1">
-        <label className="block text-sm font-medium text-gray-700">
-          {label}
-        </label>
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1"
-        >
-          {options.map((option, index) => (
-            <option key={index} value={option}>
-              {option || "-"}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
-  };
+  }> = ({ label, options, value, onChange }) => (
+    <div className="flex-1">
+      <label className="block text-sm font-medium text-gray-700">{label}</label>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="block w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1"
+      >
+        {options.map((option, index) => (
+          <option key={index} value={option}>
+            {option || "-"}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
 
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-black via-transparent to-transparent">
       <div className="bg-white w-full md:w-7/8 max-w-screen-lg p-7 border-4 border-red-700 rounded-lg">
-        <header className="text-4xl text-center text-gray-800 mb-4">
-          Općinski Imenik
-        </header>
+        <header className="text-4xl text-center text-gray-800 mb-4">Općinski Imenik</header>
         <div className="flex items-center mb-4 relative">
           <input
             type="text"
@@ -170,14 +159,13 @@ const Search: React.FC = () => {
             </p>
           ) : (
             <>
-              {searchResults.length > 0 ? (
+              {loading ? (
+                <p className="text-gray-600 text-center">Učitavam...</p>
+              ) : searchResults.length > 0 ? (
                 <Results searchResults={searchResults} />
               ) : (
-                <p className="text-gray-600 text-center">
-                  Nema pronađenih rezultata.
-                </p>
+                <p className="text-gray-600 text-center">Nema pronađenih rezultata.</p>
               )}
-              {loading && <p className="text-gray-600 text-center">Učitavam...</p>}
             </>
           )}
         </div>
