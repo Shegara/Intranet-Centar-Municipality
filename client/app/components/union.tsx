@@ -58,7 +58,9 @@ const Union: React.FC = () => {
                 </button>
               </div>
               <div
-                ref={(el) => (contentRefs.current[index] = el!)}
+                ref={(el) => {
+                  contentRefs.current[index] = el!;
+                }}
                 className={`transition-max-height duration-500 ease-in-out overflow-hidden max-h-0`}
                 dangerouslySetInnerHTML={{ __html: item.content }}
               />

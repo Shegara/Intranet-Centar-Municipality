@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from 'axios';
 import Results from "./results";
 import XIcon from '@mui/icons-material/HighlightOffSharp';
@@ -45,9 +45,9 @@ const Search: React.FC = () => {
     setSearchTerm("");
   };
 
-  const isFilterOrSearchActive = () => {
+  const isFilterOrSearchActive = useCallback(() => {
     return searchTerm.trim() !== "" || Object.values(filterOptions).some(option => option !== "");
-  };
+  }, [searchTerm, filterOptions]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -89,7 +89,7 @@ const Search: React.FC = () => {
     };
 
     fetchUsers();
-  }, [filterOptions, searchTerm]);
+  }, [filterOptions, searchTerm, isFilterOrSearchActive]);
 
   const FilterBox: React.FC<{
     label: string;

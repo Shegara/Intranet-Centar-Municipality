@@ -18,6 +18,7 @@ interface Services {
   [key: string]: User[];
 }
 
+
 const Service: React.FC = () => {
   const [expanded, setExpanded] = useState<boolean[]>([]);
   const [searchQueries, setSearchQueries] = useState<string[]>([]);
@@ -153,7 +154,9 @@ const Service: React.FC = () => {
                   </div>
                 </div>
                 <div
-                  ref={(el: HTMLDivElement | null) => (contentRefs.current[index] = el)}
+                  ref={(el: HTMLDivElement | null) => {
+                    contentRefs.current[index] = el;
+                  }}
                   className={`transition-max-height duration-500 ease-in-out overflow-hidden max-h-0`}
                 >
                   <div className="relative">
