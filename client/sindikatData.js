@@ -17,7 +17,7 @@ const sindikatData = [
       <strong>„ALLURE Sarajevo“ Vrazova 1</strong> – (do 3 rate i popust 15% za gotovinsko plaćanje); <br> 
       <strong>„DRESSCODE“ DOO</strong> – do 5 mjesečnih rata; <br> 
       <strong>„HERTEX“ DOO MODRIČA</strong> – do 6 mjesečnih rata sa min mjesečnom ratom u visini 30,00 KM; <br> 
-      <strong>„ADRIX“ DOO HADŽIĆI</strong> – do 4 mjesečne rate; <br> 
+      „ADRIX“ DOO HADŽIĆI – do 4 mjesečne rate; <br> 
       <strong>„TAMEK SON COMPANY“</strong> – GUME; <br> 
       <strong>„PLANIKA“</strong> – SALON OBUĆE; <br> 
       <strong>„ASTRA BOROVO“</strong>; <br> 
@@ -29,6 +29,6 @@ const sindikatData = [
       <strong>GEMA</strong> – (POPUST 10 % I KUPOVINA DO 4 MJESEČNE RATE).`
     }
   ];
-  
+
   export default sindikatData;
   
