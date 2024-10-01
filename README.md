@@ -22,7 +22,7 @@ use cd to locate the folder once cloned (usually C:\Users\...)
 ## Start the backend server
 cd api (once you're in /intranet-centar-municipality folder path)
 
-npm install dotenv multer 
+npm install dotenv multer pg
 
 npm run build
 
