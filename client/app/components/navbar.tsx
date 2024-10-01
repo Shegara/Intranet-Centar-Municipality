@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="bg-red-700 border-b-2 border-white">
-      <div className="max-w-7xl mx-auto px-6 sm:px-2 lg:px-2 flex items-center justify-between h-16">
+      <div className="md:ml-20 md:mr-20 lg:max-w-8xl mx-auto px-6 sm:px-2 lg:px-2 flex items-center justify-between h-16">
         <div className="flex items-center">
           <Link href="/" className="flex items-center">
             <Image
@@ -29,7 +29,7 @@ const Navbar: React.FC = () => {
             </p>
           </Link>
         </div>
-        
+
         <div className="hidden md:flex space-x-4">
           {links.map((page) => (
             <Link 
@@ -41,7 +41,7 @@ const Navbar: React.FC = () => {
             </Link>
           ))}
         </div>
-        
+
         <div className="md:hidden flex items-center">
           <button
             className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
@@ -55,7 +55,7 @@ const Navbar: React.FC = () => {
           </button>
         </div>
       </div>
-      
+
       <div className={`md:hidden ${isOpen ? 'block' : 'hidden'} px-2 pt-2 pb-3 space-y-1 sm:px-3`}>
         {links.map((page) => (
           <Link 

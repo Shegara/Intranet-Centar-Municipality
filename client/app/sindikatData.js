@@ -4,10 +4,6 @@ const sindikatData = [
       content: "<br> <strong>Predsjednik sindikata</strong> <br> <br> Elma Porča"
     },
     {
-      title: "Pravilnici",
-      content: "Trenutno prazno"
-    },
-    {
       title: "Ugovori sa firmama",
       content: `<br> <strong>PLAZA DOO SARAJEVO</strong> – obračun rata je moguć na slijedeći način: iznos od 150,00 KM-300,00 KM (mogućnost kupovine na 3 rate), iznos od 300,00 KM – 600,00 KM (mogućnost kupovine na 4 rate), iznos od 600,00 KM i više (mogućnost kupovine na 6 rata); <br> 
       <strong>„VITAPUR“ DOO SARAJEVO</strong> – do 12 mjesečnih rata sa min mjesečnom ratom u visini 30,00 KM; <br> 
@@ -31,11 +27,7 @@ const sindikatData = [
       <strong>„MONA“ ALTA</strong>;  
       <strong>STOMATOLOŠKA ORDINACIJA DR. CERIĆ-DŽAFEROVIĆ LEJLA</strong> – (DO 12 MJESEČNIH RATA); <br> 
       <strong>GEMA</strong> – (POPUST 10 % I KUPOVINA DO 4 MJESEČNE RATE).`
-    },
-    {
-      title: "Izvještaji",
-      content: "Trenutno prazno"
-    },
+    }
   ];
   
   export default sindikatData;

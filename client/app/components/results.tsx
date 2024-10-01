@@ -53,7 +53,7 @@ const Results: React.FC<ResultsProps> = ({ searchResults }) => {
               id={item.id}
               firstName={item.first_name}
               lastName={item.last_name}
-              image={item.image}
+              image={item.image || '/Default.png'}
               service={item.service}
               rank={item.rank}
               mail={item.mail}
