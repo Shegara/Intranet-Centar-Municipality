@@ -25,7 +25,7 @@ const Docs: React.FC = () => {
       try {
         setLoading(true);
         const response = await axios.get<DocItem[]>(
-          "http://localhost:8800/api/docs"
+          "http://192.168.1.2:8800/api/docs"
         );
         const data = response.data;
         setDocs(data);
@@ -68,11 +68,18 @@ const Docs: React.FC = () => {
   }, [expanded]);
 
   const handleDownload = (file: string) => {
+    if (!file) {
+        console.error("No file provided for download");
+        return;
+    }
     const link = document.createElement("a");
-    link.href = file;
+    link.href = file.replace("localhost", "192.168.1.2"); 
+    link.target = "_blank"; 
     link.download = file.split("/").pop() || "";
+    document.body.appendChild(link); 
     link.click();
-  };
+    document.body.removeChild(link); 
+};
 
   const groupedDocs = docs.reduce((acc, doc) => {
     (acc[doc.category] = acc[doc.category] || []).push(doc);

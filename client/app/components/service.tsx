@@ -31,7 +31,7 @@ const Service: React.FC = () => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get<User[]>(
-          "http://localhost:8800/api/users"
+          "http://192.168.1.2:8800/api/users"
         );
         const users = response.data;
 

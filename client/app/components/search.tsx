@@ -58,7 +58,7 @@ const Search: React.FC = () => {
 
       setLoading(true);
       try {
-        const { data } = await axios.get<User[]>('http://localhost:8800/api/users');
+        const { data } = await axios.get<User[]>('http://192.168.1.2:8800/api/users');
         const filteredResults = data.filter((user) => {
           const { first_name, last_name, rank, mail, floor, office_num, service } = user;
           const searchTermLower = searchTerm.toLowerCase();

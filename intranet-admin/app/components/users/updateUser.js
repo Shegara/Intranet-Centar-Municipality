@@ -28,7 +28,7 @@ const UpdateUser = () => {
     rank: '',
     floor: '',
     office_num: '',
-    image: null,
+    image: '',
     service: ''
   });
 
@@ -36,7 +36,7 @@ const UpdateUser = () => {
 
   const fetchUserData = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:8800/api/users/${id}`);
+      const response = await axios.get(`http://192.168.1.2:8800/api/users/${id}`);
       setUserData(response.data);
       setUpdateFields(response.data);
     } catch (error) {
@@ -58,7 +58,7 @@ const UpdateUser = () => {
         rank: '',
         floor: '',
         office_num: '',
-        image: null,
+        image: '',
         service: ''
       });
       setTempImage(null); 
@@ -74,21 +74,25 @@ const UpdateUser = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setTempImage(file); 
-    }
+      setTempImage(file);
+    } 
   };
-
+  
   const handleUpdate = async () => {
     const formData = new FormData();
-
+  
     Object.keys(updateFields).forEach((key) => {
-      if (key === 'image' && tempImage) {
-        formData.append(key, tempImage); 
+      if (key === 'image') {
+        if (tempImage != null) {
+          formData.append(key, tempImage); 
+        } else if (updateFields.image) {
+          formData.append(key, updateFields.image); 
+        }
       } else if (updateFields[key] !== null && updateFields[key] !== '') {
         formData.append(key, updateFields[key]);
       }
     });
-
+  
     try {
       await axios.put(`http://localhost:8800/api/users/${userId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },

@@ -28,6 +28,6 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server is successfully running at http://localhost:${port}`);
+app.listen(8800, '0.0.0.0', () => {
+  console.log(`Server is successfully running at http://192.168.1.2:${port}`);
 });

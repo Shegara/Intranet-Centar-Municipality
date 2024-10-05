@@ -30,25 +30,22 @@ router.post("/", multerConfig_1.default.single('image'), async (req, res) => {
         res.status(500).send("Server error");
     }
 });
-//PUT route for user update 
 router.put("/:id", multerConfig_1.default.single('image'), async (req, res) => {
     const { id } = req.params;
     const { first_name, last_name, phone_num, mail, rank, floor, office_num, service, } = req.body;
-    // Handle file upload
-    const image = req.file ? 'http://localhost:8800/uploads/' + req.file.filename : null;
+    // Handle file upload, only set if file exists
+    const image = req.file ? 'http://localhost:8800/uploads/' + req.file.filename : undefined;
+    // Construct the update query dynamically based on the presence of an image
+    const query = `
+    UPDATE users 
+    SET first_name = $1, last_name = $2, phone_num = $3, mail = $4, rank = $5, floor = $6, office_num = $7, 
+    ${image ? 'image = $8,' : ''} service = $${image ? 9 : 8} 
+    WHERE id = $${image ? 10 : 9} RETURNING *`;
+    const values = image
+        ? [first_name, last_name, phone_num, mail, rank, floor, office_num, image, service, id]
+        : [first_name, last_name, phone_num, mail, rank, floor, office_num, service, id];
     try {
-        const result = await db_1.default.query("UPDATE users SET first_name = $1, last_name = $2, phone_num = $3, mail = $4, rank = $5, floor = $6, office_num = $7, image = $8, service = $9 WHERE id = $10 RETURNING *", [
-            first_name,
-            last_name,
-            phone_num,
-            mail,
-            rank,
-            floor,
-            office_num,
-            image || null,
-            service,
-            id,
-        ]);
+        const result = await db_1.default.query(query, values);
         if (result.rows.length === 0) {
             return res.status(404).send("User not found");
         }

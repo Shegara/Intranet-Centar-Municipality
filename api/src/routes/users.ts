@@ -31,7 +31,7 @@ router.post("/", upload.single('image'), async (req: Request, res: Response) => 
   }
 });
 
-//PUT route for user update 
+// PUT route for updating a user with image upload
 router.put("/:id", upload.single('image'), async (req: Request, res: Response) => {
   const { id } = req.params;
   const {
@@ -45,25 +45,20 @@ router.put("/:id", upload.single('image'), async (req: Request, res: Response) =
     service,
   } = req.body;
 
-  // Handle file upload
   const image = req.file ? 'http://localhost:8800/uploads/' + req.file.filename : null;
 
+  const query = `
+    UPDATE users 
+    SET first_name = $1, last_name = $2, phone_num = $3, mail = $4, rank = $5, floor = $6, office_num = $7, 
+    ${image ? 'image = $8,' : ''} service = $${image ? 9 : 8} 
+    WHERE id = $${image ? 10 : 9} RETURNING *`;
+
+  const values = image
+    ? [first_name, last_name, phone_num, mail, rank, floor, office_num, image, service, id]
+    : [first_name, last_name, phone_num, mail, rank, floor, office_num, service, id];
+
   try {
-    const result = await pool.query(
-      "UPDATE users SET first_name = $1, last_name = $2, phone_num = $3, mail = $4, rank = $5, floor = $6, office_num = $7, image = $8, service = $9 WHERE id = $10 RETURNING *",
-      [
-        first_name,
-        last_name,
-        phone_num,
-        mail,
-        rank,
-        floor,
-        office_num,
-        image || null, 
-        service,
-        id,
-      ]
-    );
+    const result = await pool.query(query, values);
 
     if (result.rows.length === 0) {
       return res.status(404).send("User not found");
@@ -75,6 +70,7 @@ router.put("/:id", upload.single('image'), async (req: Request, res: Response) =
     res.status(500).send("Server error");
   }
 });
+
 
 // Read all users
 router.get("/", async (_req: Request, res: Response) => {
