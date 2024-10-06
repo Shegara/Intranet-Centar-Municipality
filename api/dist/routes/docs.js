@@ -52,7 +52,14 @@ router.put("/:id", multerConfig_1.default.single('document'), async (req, res) =
     const { name, category } = req.body;
     const documentURL = req.file ? 'http://localhost:8800/uploads/' + req.file.filename : null;
     try {
-        const result = await db_1.default.query("UPDATE docs SET name = $1, category = $2, document = $3 WHERE id = $4 RETURNING *", [name, category, documentURL || null, id]);
+        const query = `
+      UPDATE docs 
+      SET name = COALESCE($1, name), 
+          category = COALESCE($2, category), 
+          document = COALESCE($3, document) 
+      WHERE id = $4 
+      RETURNING *`;
+        const result = await db_1.default.query(query, [name, category, documentURL, id]);
         if (result.rows.length === 0) {
             return res.status(404).send("Document not found");
         }

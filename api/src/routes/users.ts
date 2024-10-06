@@ -47,17 +47,34 @@ router.put("/:id", upload.single('image'), async (req: Request, res: Response) =
 
   const image = req.file ? 'http://localhost:8800/uploads/' + req.file.filename : null;
 
-  const query = `
-    UPDATE users 
-    SET first_name = $1, last_name = $2, phone_num = $3, mail = $4, rank = $5, floor = $6, office_num = $7, 
-    ${image ? 'image = $8,' : ''} service = $${image ? 9 : 8} 
-    WHERE id = $${image ? 10 : 9} RETURNING *`;
-
-  const values = image
-    ? [first_name, last_name, phone_num, mail, rank, floor, office_num, image, service, id]
-    : [first_name, last_name, phone_num, mail, rank, floor, office_num, service, id];
-
   try {
+    const query = `
+      UPDATE users 
+      SET first_name = COALESCE($1, first_name), 
+          last_name = COALESCE($2, last_name), 
+          phone_num = COALESCE($3, phone_num), 
+          mail = COALESCE($4, mail), 
+          rank = COALESCE($5, rank), 
+          floor = COALESCE($6, floor), 
+          office_num = COALESCE($7, office_num), 
+          image = COALESCE($8, image), 
+          service = COALESCE($9, service) 
+      WHERE id = $10 
+      RETURNING *`;
+
+    const values = [
+      first_name, 
+      last_name, 
+      phone_num, 
+      mail, 
+      rank, 
+      floor, 
+      office_num, 
+      image, 
+      service, 
+      id
+    ];
+
     const result = await pool.query(query, values);
 
     if (result.rows.length === 0) {
