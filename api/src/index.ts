@@ -9,6 +9,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 8800;
+const ip = process.env.IP_ADDRESS
 
 
 // Serve static files from the uploads directory
@@ -29,5 +30,5 @@ app.get('/', (req: Request, res: Response) => {
 
 // Start the server
 app.listen(8800, '0.0.0.0', () => {
-  console.log(`Server is successfully running at http://192.168.1.2:${port}`);
+  console.log(`Server is successfully running at ${ip}:${port}`);
 });

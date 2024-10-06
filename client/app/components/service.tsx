@@ -18,6 +18,7 @@ interface Services {
   [key: string]: User[];
 }
 
+const ip_address = process.env.NEXT_PUBLIC_IP_ADDRESS;
 
 const Service: React.FC = () => {
   const [expanded, setExpanded] = useState<boolean[]>([]);
@@ -31,7 +32,7 @@ const Service: React.FC = () => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get<User[]>(
-          "http://192.168.1.2:8800/api/users"
+          `${ip_address}:8800/api/users`
         );
         const users = response.data;
 

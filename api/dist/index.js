@@ -12,6 +12,7 @@ const docs_1 = __importDefault(require("./routes/docs"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 8800;
+const ip = process.env.IP_ADDRESS;
 // Serve static files from the uploads directory
 app.use('/uploads', express_1.default.static(path_1.default.join(__dirname, '../uploads')));
 // Middleware setup
@@ -26,5 +27,5 @@ app.get('/', (req, res) => {
 });
 // Start the server
 app.listen(8800, '0.0.0.0', () => {
-    console.log(`Server is successfully running at http://192.168.1.2:${port}`);
+    console.log(`Server is successfully running at ${ip}:${port}`);
 });

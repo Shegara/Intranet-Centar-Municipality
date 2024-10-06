@@ -27,6 +27,8 @@ interface User {
 
 interface SearchResult extends User {}
 
+const ip_address = process.env.NEXT_PUBLIC_IP_ADDRESS;
+
 const Search: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
@@ -58,7 +60,8 @@ const Search: React.FC = () => {
 
       setLoading(true);
       try {
-        const { data } = await axios.get<User[]>('http://192.168.1.2:8800/api/users');
+        const { data } = await axios.get<User[]>(`${ip_address}:8800/api/users`)
+        ;
         const filteredResults = data.filter((user) => {
           const { first_name, last_name, rank, mail, floor, office_num, service } = user;
           const searchTermLower = searchTerm.toLowerCase();
@@ -113,6 +116,8 @@ const Search: React.FC = () => {
     </div>
   );
 
+  console.log(ip_address);
+  
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-black via-transparent to-transparent">
       <div className="bg-white w-full md:w-7/8 max-w-screen-lg p-7 border-4 border-red-700 rounded-lg">

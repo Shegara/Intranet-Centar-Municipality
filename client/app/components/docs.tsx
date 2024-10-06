@@ -13,6 +13,8 @@ interface DocItem {
   document: string;
 }
 
+const ip_address = process.env.NEXT_PUBLIC_IP_ADDRESS;
+
 const Docs: React.FC = () => {
   const [docs, setDocs] = useState<DocItem[]>([]);
   const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({});
@@ -25,7 +27,7 @@ const Docs: React.FC = () => {
       try {
         setLoading(true);
         const response = await axios.get<DocItem[]>(
-          "http://192.168.1.2:8800/api/docs"
+          `${ip_address}:8800/api/docs`
         );
         const data = response.data;
         setDocs(data);
@@ -73,7 +75,7 @@ const Docs: React.FC = () => {
         return;
     }
     const link = document.createElement("a");
-    link.href = file.replace("localhost", "192.168.1.2"); 
+    link.href = file.replace("localhost", `${ip_address}`); 
     link.target = "_blank"; 
     link.download = file.split("/").pop() || "";
     document.body.appendChild(link); 
