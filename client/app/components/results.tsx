@@ -18,25 +18,6 @@ interface ResultsProps {
   searchResults: SearchResult[];
 }
 
-const getNameClass = (firstName: string | null | undefined, lastName: string | null | undefined): string => {
-  const firstNameSafe = firstName || '';
-  const lastNameSafe = lastName || '';
-  const totalLength = firstNameSafe.length + lastNameSafe.length;
-  
-  if (totalLength >= 20) {
-    return "text-sm"; 
-  } else if (totalLength >= 15 && totalLength < 20) {
-    return "text-base"; 
-  } else {
-    return "text-lg"; 
-  }
-};
-
-const getEmailClass = (mail: string | null | undefined): string => {
-  const mailSafe = mail || '';
-  return mailSafe.length >= 20 ? "text-sm" : "text-base";
-};
-
 const Results: React.FC<ResultsProps> = ({ searchResults }) => {
   const sortedResults = searchResults.slice().sort((a, b) => {
     return a.first_name.localeCompare(b.first_name);
@@ -60,8 +41,6 @@ const Results: React.FC<ResultsProps> = ({ searchResults }) => {
               floor={item.floor}
               officeNum={item.office_num}
               phoneNum={item.phone_num}
-              getNameClass={getNameClass}
-              getEmailClass={getEmailClass}
             />
           ))}
         </>

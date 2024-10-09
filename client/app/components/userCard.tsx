@@ -12,8 +12,6 @@ interface UserCardProps {
   floor: string;
   officeNum: string;
   phoneNum: string;
-  getNameClass: (firstName: string, lastName: string) => string;
-  getEmailClass: (mail: string) => string;
 }
 
 const UserCard: React.FC<UserCardProps> = ({
@@ -27,34 +25,28 @@ const UserCard: React.FC<UserCardProps> = ({
   floor,
   officeNum,
   phoneNum,
-  getNameClass,
-  getEmailClass,
 }) => {
   return (
     <div className="mb-4 p-4 border border-gray-300 rounded-md">
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <UserInfo
           firstName={firstName}
           lastName={lastName}
           image={image}
           phoneNum={phoneNum}
-          getNameClass={getNameClass}
         />
         <div className="col-span-2 border-l border-gray-300 pl-4 flex flex-col justify-center">
           <div>
             <strong>Služba:</strong> {service}
           </div>
-          <div className="mt-4">
+          <div className="mt-2">
             <strong>Pozicija:</strong> {rank}
           </div>
           <div className="mt-4">
-            <strong>Email:</strong>{" "}
-            <span className={getEmailClass(mail)}>
-              {mail}
-            </span>
+            <strong>Email:</strong> {mail}
           </div>
         </div>
-        <div className="border-l border-gray-300 pl-4 flex flex-col items-center justify-center">
+        <div className="border-l border-gray-300 pl-4 flex flex-col justify-center">
           <div>
             <strong>ID:</strong> {id}
           </div>

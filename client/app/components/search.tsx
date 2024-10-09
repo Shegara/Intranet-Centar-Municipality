@@ -60,8 +60,7 @@ const Search: React.FC = () => {
 
       setLoading(true);
       try {
-        const { data } = await axios.get<User[]>(`${ip_address}:8800/api/users`)
-        ;
+        const { data } = await axios.get<User[]>(`${ip_address}:8800/api/users`);
         const filteredResults = data.filter((user) => {
           const { first_name, last_name, rank, mail, floor, office_num, service } = user;
           const searchTermLower = searchTerm.toLowerCase();
@@ -165,7 +164,7 @@ const Search: React.FC = () => {
           ) : (
             <>
               {loading ? (
-                <p className="text-gray-600 text-center">Učitavam...</p>
+                <p className="text-3xl text-white">Učitavam...</p>
               ) : searchResults.length > 0 ? (
                 <Results searchResults={searchResults} />
               ) : (

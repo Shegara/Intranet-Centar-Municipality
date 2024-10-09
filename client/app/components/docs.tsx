@@ -13,7 +13,8 @@ interface DocItem {
   document: string;
 }
 
-const ip_address = process.env.NEXT_PUBLIC_IP_ADDRESS;
+const ip_address = 'http://192.168.1.2';
+const ip_docs = ip_address.slice(7);
 
 const Docs: React.FC = () => {
   const [docs, setDocs] = useState<DocItem[]>([]);
@@ -71,18 +72,24 @@ const Docs: React.FC = () => {
 
   const handleDownload = (file: string) => {
     if (!file) {
-        console.error("No file provided for download");
-        return;
+      console.error("No file provided for download");
+      return;
     }
-    const link = document.createElement("a");
-    link.href = file.replace("localhost", `${ip_address}`); 
-    link.target = "_blank"; 
-    link.download = file.split("/").pop() || "";
-    document.body.appendChild(link); 
-    link.click();
-    document.body.removeChild(link); 
-};
+  
+    let downloadUrl = file;
+    if (file.includes("localhost")) {
+      downloadUrl = file.replace("localhost", `${ip_docs}`);
+    }
 
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.target = "_blank";
+    link.download = file.split("/").pop() || "";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  
   const groupedDocs = docs.reduce((acc, doc) => {
     (acc[doc.category] = acc[doc.category] || []).push(doc);
     return acc;
